@@ -1,11 +1,12 @@
 #include "ClassAssignment.h"
+#include "CommentProcess.h"
 #include <cstdlib>
 #include<cstring>
 
 void ClassAssignment::run()
 {
 	printf("请输入课程信息文件的路径：");
-	char path[256];
+	char path[256] = { '\0' };
 	scanf("%s", path);
 
 	FILE* in_fp; //打开文件
@@ -17,7 +18,11 @@ void ClassAssignment::run()
 
 	int num_of_class[8] = { 0 }; //读入每学期要排的课的数量
 	for (int i = 0; i < 8; i++)
+	{
+		comment_process(in_fp); //消除注释的影响
 		fscanf(in_fp, "%d", &num_of_class[i]);
+	}
+		
 
 	//下面逐行处理排课信息
 	for (int i = 0; i < 38; i++) //38 行排课信息
@@ -28,6 +33,7 @@ void ClassAssignment::run()
 		int time = 0; //课时
 		int term = -1; //开课学期
 		class_num prerequisite = { '\0' }; //前置课程课程号
+		comment_process(in_fp); //消除注释的影响
 		fscanf(in_fp, "%s%s%d%d", num, name, &time, &term); //把除了前置课程以外的信息读入内存
 		if (term)
 		{
